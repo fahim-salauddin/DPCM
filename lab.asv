@@ -1,0 +1,51 @@
+clear all;
+close all;
+clc;
+
+load handel;
+Signal=y;
+K=input('Enter the quantization level => K : ');
+t=1:length(Signal);
+
+figure,plot(t/Fs*1000,Signal(t)); %note that time depends on the sampling frequency
+title('Original Signal');
+xlabel('Time (ms)');
+ylabel('m(t)');
+grid on;
+
+[qSignal, scaleFactor] = myQuantization(Signal, K);
+
+figure,plot(t/Fs*1000,qSignal(t),'r');
+title('Quantized Speech Signal');
+xlabel('Time(ms)');
+ylabel('Levels');
+grid on;
+
+
+[dqSignal] = myDeQuantization(qSignal, K, scaleFactor)
+
+figure,plot(t/Fs*1000,dqSignal(t));
+title('Reconstructed signal by Quantization');
+xlabel('Time(ms)');
+ylabel('r(t)');
+grid on;
+
+N=[0 0.1 0.2];
+
+[errSignal, predCoeff] = myPrediction(Signal, N);
+[reconstructsignal] = myPredictionReconstruction(errSignal, N)
+
+figure,plot(t/Fs*1000,reconstructsignal(t));
+title('Reconstructed signal by DPCM');
+xlabel('Time(ms)');
+ylabel('r(t)');
+grid on;
+
+num=sum(y.^2);
+de=sum((y-dqSignal').^2);
+de1=sum((y-reconstructsignal').^2);
+
+snr=10*log10(num./de)
+snr1=10*log10(num./de1)
+
+
