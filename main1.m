@@ -6,7 +6,7 @@ load laughter;
 Signal=y;
 K=input('Enter the quantization level => K : ');
 t=1:length(Signal);
-%sound(Signal)
+%sound(Signal);
 
 figure,plot(t/Fs*1000,Signal(t),'color',rand(1,3)); 
 title('Original Signal','FontWeight','Normal');
